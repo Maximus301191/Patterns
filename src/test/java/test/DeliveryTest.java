@@ -1,14 +1,13 @@
-package ru.netology.javaqa;
+package test;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import java.time.Duration;
 
-import Data.DataGenerator;
+import data.DataGenerator;
 
 import static com.codeborne.selenide.Selenide.*;
 
@@ -16,8 +15,7 @@ public class DeliveryTest {
 
     @BeforeEach
     void setup() {
-        Configuration.headless = true;
-        Configuration.holdBrowserOpen = true;
+
         open("http://localhost:9999");
 
     }
@@ -39,13 +37,13 @@ public class DeliveryTest {
         $("[data-test-id=agreement]").click();
         $$("button").find(Condition.exactText("Запланировать")).click();
         $("[data-test-id='success-notification']").shouldBe(Condition.visible, Duration.ofSeconds(15));
-        $(".notification__content").shouldHave(Condition.ownText(firstMeetingDate));
+        $(".notification__content").shouldHave(Condition.text(firstMeetingDate)).shouldBe(Condition.visible);
         $("[data-test-id='date'] input").doubleClick();
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(secondMeetingDate);
         $$("button").find(Condition.exactText("Запланировать")).click();
         $("[data-test-id='replan-notification'] button").click();
         $("[data-test-id='success-notification']").shouldBe(Condition.visible, Duration.ofSeconds(15));
-        $(".notification__content").shouldHave(Condition.ownText(secondMeetingDate));
+        $(".notification__content").shouldHave(Condition.text(secondMeetingDate)).shouldBe(Condition.visible);
     }
 }
