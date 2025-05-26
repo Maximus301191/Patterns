@@ -1,14 +1,16 @@
 package test;
 
 import com.codeborne.selenide.Condition;
+import data.DataGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
+
 import java.time.Duration;
 
-import data.DataGenerator;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 public class DeliveryTest {
@@ -37,13 +39,15 @@ public class DeliveryTest {
         $("[data-test-id=agreement]").click();
         $$("button").find(Condition.exactText("Запланировать")).click();
         $("[data-test-id='success-notification']").shouldBe(Condition.visible, Duration.ofSeconds(15));
-        $(".notification__content").shouldHave(Condition.text(firstMeetingDate)).shouldBe(Condition.visible);
+        $(".notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + firstMeetingDate), Duration.ofSeconds(15))
+                .shouldBe(visible);
         $("[data-test-id='date'] input").doubleClick();
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(secondMeetingDate);
         $$("button").find(Condition.exactText("Запланировать")).click();
         $("[data-test-id='replan-notification'] button").click();
         $("[data-test-id='success-notification']").shouldBe(Condition.visible, Duration.ofSeconds(15));
-        $(".notification__content").shouldHave(Condition.text(secondMeetingDate)).shouldBe(Condition.visible);
+        $(".notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + secondMeetingDate), Duration.ofSeconds(15))
+                .shouldBe(visible);
     }
 }
